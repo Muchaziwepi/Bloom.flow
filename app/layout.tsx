@@ -3,7 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'focus.flow — Make room for deep work',
+  title: 'bloom.flow — Make room for deep work',
   description: 'A beautiful focus timer, digital clock, and personal atmosphere for your best work.',
   generator: 'v0.app',
   icons: {
