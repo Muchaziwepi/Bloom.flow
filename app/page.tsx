@@ -17,7 +17,6 @@ import {
   Play,
   RotateCcw,
   Settings2,
-  Sparkles,
   TimerReset,
   Upload,
   Volume2,
@@ -63,7 +62,6 @@ export default function Page() {
   const [note, setNote] = useState('')
   const [language, setLanguage] = useState('English')
   const [music, setMusic] = useState('none')
-  const [breakType, setBreakType] = useState<'short' | 'long'>('short')
   const [streak, setStreak] = useState(7)
 
   useEffect(() => {
@@ -120,13 +118,15 @@ export default function Page() {
     <main className="focus-shell" data-theme={theme.name.toLowerCase()} style={{ backgroundImage: `url(${activeBackground})` }}>
       <div className="backdrop" />
       <header className="topbar">
-        <div className="brand"><span className={`brand-mark bg-gradient-to-br ${theme.color}`}><Sparkles /></span><span>bloom<span className="brand-dot">.</span>flow</span></div>
+        <div className="brand"><span>bloom<span className="brand-dot">.</span>flow</span></div>
         <div className="top-actions">
           <span className="status-pill"><span className="status-dot" /> synced locally</span>
           <button className="icon-button" aria-label="Sign in" title="Sign in"><LogIn /><span className="desktop-only">Sign in</span></button>
           <button className="icon-button" aria-label="Open settings" onClick={() => setShowSettings(!showSettings)}><Settings2 /></button>
         </div>
       </header>
+
+      <nav className="utility-dock" aria-label="Productivity tools"><button className={activeTool === 'tasks' ? 'active' : ''} onClick={() => setActiveTool(activeTool === 'tasks' ? 'none' : 'tasks')} aria-label="Tasks" title="Tasks"><ListTodo /><span>{tasks.filter((task) => !task.done).length}</span></button><button className={activeTool === 'notes' ? 'active' : ''} onClick={() => setActiveTool(activeTool === 'notes' ? 'none' : 'notes')} aria-label="Notes" title="Notes"><FileText /></button><button className={activeTool === 'music' ? 'active' : ''} onClick={() => setActiveTool(activeTool === 'music' ? 'none' : 'music')} aria-label="Music" title="Music"><Headphones /></button><button onClick={() => setStreak((value) => value + 1)} aria-label={`${streak} day streak`} title={`${streak} day streak`}><span className="streak-glyph">✦</span></button></nav>
 
       <section className="workspace">
         <div className="eyebrow"><span className="eyebrow-line" /> YOUR CLEAR SPACE <span className="eyebrow-line" /></div>
@@ -151,12 +151,9 @@ export default function Page() {
           <div className="clock-stage"><span className="timer-label">LOCAL TIME</span><strong>{clock.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}</strong><span>{clock.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' })}</span></div>
         )}
 
-        <div className="streak-card"><div className="streak-flame">✦</div><div><strong>{streak} day streak</strong><span>Keep your bloom going</span></div><button onClick={() => setStreak((value) => value + 1)} aria-label="Log today's focus">Log today</button></div>
-        <div className="tool-dock"><button className={activeTool === 'tasks' ? 'active' : ''} onClick={() => setActiveTool(activeTool === 'tasks' ? 'none' : 'tasks')}><ListTodo /> Tasks <span>{tasks.filter((task) => !task.done).length}</span></button><button className={activeTool === 'notes' ? 'active' : ''} onClick={() => setActiveTool(activeTool === 'notes' ? 'none' : 'notes')}><FileText /> Notes</button><button className={activeTool === 'music' ? 'active' : ''} onClick={() => setActiveTool(activeTool === 'music' ? 'none' : 'music')}><Headphones /> Music</button></div>
-        {activeTool === 'tasks' && <div className="tool-panel"><div className="tool-heading"><div><span className="panel-kicker">YOUR FLOW</span><h3>Today&apos;s tasks</h3></div><span className="tool-count">{tasks.filter((task) => task.done).length}/{tasks.length}</span></div><form className="task-form" onSubmit={addTask}><input value={taskTitle} onChange={(event) => setTaskTitle(event.target.value)} placeholder="Add a task..." aria-label="Task name" /><input value={taskMinutes} onChange={(event) => setTaskMinutes(event.target.value)} type="number" min="1" max="999" aria-label="Task minutes" /><button type="submit" aria-label="Add task"><Check /></button></form><div className="task-list">{tasks.length === 0 ? <span className="empty-tool">Your next win belongs here.</span> : tasks.map((task, index) => <label className={task.done ? 'task-row done' : 'task-row'} key={`${task.title}-${index}`}><input type="checkbox" checked={task.done} onChange={() => setTasks((items) => items.map((item, itemIndex) => itemIndex === index ? { ...item, done: !item.done } : item))} /><span>{task.title}</span><small>{task.minutes}m</small></label>)}</div></div>}
+                {activeTool === 'tasks' && <div className="tool-panel"><div className="tool-heading"><div><span className="panel-kicker">YOUR FLOW</span><h3>Today&apos;s tasks</h3></div><span className="tool-count">{tasks.filter((task) => task.done).length}/{tasks.length}</span></div><form className="task-form" onSubmit={addTask}><input value={taskTitle} onChange={(event) => setTaskTitle(event.target.value)} placeholder="Add a task..." aria-label="Task name" /><input value={taskMinutes} onChange={(event) => setTaskMinutes(event.target.value)} type="number" min="1" max="999" aria-label="Task minutes" /><button type="submit" aria-label="Add task"><Check /></button></form><div className="task-list">{tasks.length === 0 ? <span className="empty-tool">Your next win belongs here.</span> : tasks.map((task, index) => <label className={task.done ? 'task-row done' : 'task-row'} key={`${task.title}-${index}`}><input type="checkbox" checked={task.done} onChange={() => setTasks((items) => items.map((item, itemIndex) => itemIndex === index ? { ...item, done: !item.done } : item))} /><span>{task.title}</span><small>{task.minutes}m</small></label>)}</div></div>}
         {activeTool === 'notes' && <div className="tool-panel notes-panel"><div className="tool-heading"><div><span className="panel-kicker">QUIET THOUGHTS</span><h3>Little notepad</h3></div><FileText /></div><textarea value={note} onChange={(event) => setNote(event.target.value)} placeholder="Capture a thought, intention, or idea..." aria-label="Notes" /></div>}
         {activeTool === 'music' && <div className="tool-panel"><div className="tool-heading"><div><span className="panel-kicker">SET THE TONE</span><h3>Soundtrack</h3></div><Headphones /></div><div className="music-options"><button className={music === 'spotify' ? 'selected' : ''} onClick={() => setMusic('spotify')}>Spotify <small>{music === 'spotify' ? 'Connected' : 'Open'}</small></button><button className={music === 'apple' ? 'selected' : ''} onClick={() => setMusic('apple')}>Apple Music <small>{music === 'apple' ? 'Connected' : 'Open'}</small></button><button className={music === 'ambient' ? 'selected' : ''} onClick={() => setMusic('ambient')}>Ambient sounds <small>{music === 'ambient' ? 'Playing' : 'Play'}</small></button></div></div>}
-        <div className="break-row"><span>Need a reset?</span><button className={breakType === 'short' ? 'active' : ''} onClick={() => { setBreakType('short'); updateHours('0.08') }}>Short break · 5m</button><button className={breakType === 'long' ? 'active' : ''} onClick={() => { setBreakType('long'); updateHours('0.25') }}>Long break · 15m</button></div>
         <div className="quick-settings">
           <div className="setting-card"><span className="setting-icon"><Clock3 /></span><div><span className="card-label">SESSION LENGTH</span><label><input type="number" min="0.25" max="999" step="0.25" value={(duration / 3600).toString()} onChange={(event) => updateHours(event.target.value)} /> <span>hours</span></label></div><ChevronDown /></div>
           <div className="setting-card"><span className="setting-icon"><ImagePlus /></span><div><span className="card-label">SCENE</span><label>{customBackground ? 'Your uploaded image' : backgrounds.find((item) => item.value === background)?.name}</label></div><button className="mini-link" onClick={() => setShowSettings(true)}>Change</button></div>
