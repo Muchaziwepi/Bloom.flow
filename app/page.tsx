@@ -25,16 +25,6 @@ const backgrounds = [
     value:
       'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/download%20%284%29-DukrAXNaxTYeO6vW2jx5omCaG4Ghhu.jpg',
   },
-  {
-    name: 'Focus',
-    value:
-      'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Flocus%E2%84%A2%20_%20A%20beautiful%20way%20to%20get%20more%20done-acNpYMUW51JRJsTOwnZqlm75edjlGI.jpg',
-  },
-  {
-    name: 'Meadow',
-    value:
-      'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Aesthetic%20Online%20Stopwatch%20%281%29-nlRFRUBGx9xnGrd1BrEloCHFXH08Np.jpg',
-  },
 ]
 
 const themes = [
@@ -101,7 +91,7 @@ export default function Page() {
   }
 
   return (
-    <main className="focus-shell" style={{ backgroundImage: `url(${activeBackground})` }}>
+    <main className="focus-shell" data-theme={theme.name.toLowerCase()} style={{ backgroundImage: `url(${activeBackground})` }}>
       <div className="backdrop" />
       <header className="topbar">
         <div className="brand"><span className={`brand-mark bg-gradient-to-br ${theme.color}`}><Sparkles /></span><span>focus<span className="brand-dot">.</span>flow</span></div>
